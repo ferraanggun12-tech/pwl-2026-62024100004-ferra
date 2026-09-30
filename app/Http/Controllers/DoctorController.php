@@ -8,7 +8,14 @@ class DoctorController extends Controller
 {
     public function index()
     {
-        $judul = 'Data Dokter';
-        return view('dokter.index', compact('judul'));
+        $doctors = [
+            ['nama' => 'dr. Andi', 'spesialisasi' => 'Spesialis Anak', 'status' => 'aktif'],
+            ['nama' => 'dr. Budi', 'spesialisasi' => 'Spesialis Bedah', 'status' => 'cuti'],
+            ['nama' => 'dr. Citra', 'spesialisasi' => 'Spesialis Gigi', 'status' => 'aktif'],
+            ['nama' => 'dr. Dewi', 'spesialisasi' => 'Spesialis Mata', 'status' => 'aktif'],
+            ['nama' => 'dr. Eko', 'spesialisasi' => 'Spesialis Penyakit Dalam', 'status' => 'nonaktif'],
+        ];
+
+        return view('dokter.index', compact('doctors'));
     }
 }
