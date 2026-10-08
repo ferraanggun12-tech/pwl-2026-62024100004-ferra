@@ -1,39 +1,41 @@
-@extends('layouts.app')
+@extends('layouts.app') {{-- Sesuaikan nama file layout kamu dari Pertemuan 3 --}}
 
-@section('title', 'Data Dokter')
-
-@section('content')
-    <h1>Daftar Dokter Klinik</h1>
-    <table border="1" cellpadding="8" cellspacing="0">
-        <thead>
-            <tr>
-                <th>No.</th>
-                <th>Nama Dokter</th>
-                <th>Spesialisasi</th>
-                <th>Status Praktik</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($doctors as $doctor)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $doctor['nama'] }}</td>
-                    <td>{{ $doctor['spesialisasi'] }}</td>
-                    <td>
-                        @if ($doctor['status'] === 'aktif')
-                            <span style="color: green; font-weight: bold;">Aktif</span>
-                        @elseif ($doctor['status'] === 'cuti')
-                            <span style="color: orange; font-weight: bold;">Cuti</span>
-                        @else
-                            <span style="color: red; font-weight: bold;">Tidak Aktif</span>
-                        @endif
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4">Belum ada data dokter.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-@endsection
+   @section('content')
+   <div class="container mt-4">
+       <h2>Data Dokter</h2>
+       <table class="table table-bordered">
+           <thead>
+               <tr>
+                   <th>No</th>
+                   <th>Kode Dokter</th>
+                   <th>Nama Dokter</th>
+                   <th>Spesialisasi</th>
+                   <th>No. Telepon</th>
+                   <th>Status</th>
+               </tr>
+           </thead>
+           <tbody>
+               @forelse ($doctors as $doctor)
+                   <tr>
+                       <td>{{ $loop->iteration }}</td>
+                       <td>{{ $doctor->doctor_code }}</td>
+                       <td>{{ $doctor->name }}</td>
+                       <td>{{ $doctor->specialization }}</td>
+                       <td>{{ $doctor->phone ?? '-' }}</td>
+                       <td>
+                           @if($doctor->is_active)
+                               <span class="badge bg-success">Aktif</span>
+                           @else
+                               <span class="badge bg-danger">Tidak Aktif</span>
+                           @endif
+                       </td>
+                   </tr>
+               @empty
+                   <tr>
+                       <td colspan="6" class="text-center">Data dokter belum ada.</td>
+                   </tr>
+               @endforelse
+           </tbody>
+       </table>
+   </div>
+   @endsection
