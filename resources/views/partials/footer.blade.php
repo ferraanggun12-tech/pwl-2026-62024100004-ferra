@@ -1,3 +1,3 @@
-<footer>
-    <p>&copy; Pemrograman Web Lanjut - UMKU</p>
+<footer class="main-footer">
+    <strong>Copyright &copy; 2026 Sistem Informasi Klinik.</strong>
 </footer>
