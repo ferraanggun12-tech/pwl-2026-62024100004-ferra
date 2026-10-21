@@ -33,6 +33,13 @@ class PoliController extends Controller
         return redirect()->route('poli.index')->with('success', 'Data poli berhasil ditambahkan.');
     }
 
+    public function show($id)
+    {
+        // Memuat relasi doctors yang ada di dalam poli tersebut
+        $poli = Poli::with('doctors')->findOrFail($id);
+        return view('poli.show', compact('poli'));
+    }
+
     public function edit(Poli $poli)
     {
         return view('poli.edit', compact('poli'));

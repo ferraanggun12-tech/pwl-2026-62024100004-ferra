@@ -13,6 +13,7 @@ Route::get('/', function () {
 
 Route::resource('pasien', PatientController::class);
 Route::get('/dokter', [DoctorController::class, 'index'])->name('dokter.index');
+Route::resource('dokter', DoctorController::class);
 Route::resource('poli', PoliController::class);
 Route::get('/jadwal', [ScheduleController::class, 'index'])->name('jadwal.index');
 Route::get('/jadwal/{hari}', [ScheduleController::class, 'show']);
