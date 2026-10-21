@@ -22,5 +22,9 @@
            style="color: #668cd3; text-decoration: none; padding: 10px 20px; display: block; {{ Request::is('poli*') ? 'background-color: #007bff; color: #fff;' : '' }}">
            Poli
         </a>
+        <a href="{{ route('registrasi.index') }}" 
+           style="color: #668cd3; text-decoration: none; padding: 10px 20px; display: block; {{ Request::is('pendaftaran*') ? 'background-color: #007bff; color: #fff;' : '' }}">
+           Pendaftaran
+        </a>
     </nav>
 </div>

@@ -25,7 +25,7 @@
                                 <th>Nama Poli</th>
                                 <th>Deskripsi</th>
                                 <th>Status</th>
-                                <th style="width: 150px; text-align: center;">Aksi</th>
+                                <th style="width: 180px; text-align: center;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,12 +33,18 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $poli->code }}</td>
-                                    <td>{{ $poli->name }}</td>
+                                    <td>
+                                        <!-- Link menuju halaman Detail Poli (Show) -->
+                                        <a href="{{ route('poli.show', $poli->id) }}" style="color: #007bff; text-decoration: none; font-weight: bold;">
+                                            {{ $poli->name }}
+                                        </a>
+                                    </td>
                                     <td>{{ $poli->description ?? '-' }}</td>
                                     <td>{{ $poli->is_active ? 'Aktif' : 'Tidak Aktif' }}</td>
                                     <td style="text-align: center;">
-                                        <a href="{{ route('poli.edit', $poli->id) }}" style="color: #ffc107; margin-right: 8px; text-decoration: none; font-weight: bold;">Edit</a>
-
+                                        <a href="{{ route('poli.show', $poli->id) }}" style="color: #17a2b8; margin-right: 6px; text-decoration: none; font-weight: bold;">Detail</a>
+                                        <a href="{{ route('poli.edit', $poli->id) }}" style="color: #ffc107; margin-right: 6px; text-decoration: none; font-weight: bold;">Edit</a>
+                                        
                                         <form action="{{ route('poli.destroy', $poli->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
@@ -48,8 +54,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" style="text-align: center; padding: 15px;">Data poli belum ada.</td>
-                                </tr>
+                                    <td colspan="6" style="text-align: center; padding: 15px;">Data poli belum ada.</td> 
                             @endforelse
                         </tbody>
                     </table>
