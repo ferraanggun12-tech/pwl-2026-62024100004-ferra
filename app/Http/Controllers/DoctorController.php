@@ -10,11 +10,36 @@ class DoctorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Menampilkan data dokter beserta relasi poli-nya
-        $doctors = Doctor::with('poli')->get();
-        return view('dokter.index', compact('doctors'));
+        $query = Doctor::with('poli');
+
+        // 1. Fitur Search berdasarkan nama atau kode dokter
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('doctor_code', 'like', "%{$search}%");
+            });
+        }
+
+        // 2. Filter berdasarkan Poli
+        if ($request->has('poli_id') && $request->poli_id != '') {
+            $query->where('poli_id', $request->poli_id);
+        }
+
+        // 3. Sorting (Whitelist kolom untuk keamanan)
+        $sortable = ['name', 'doctor_code', 'specialization'];
+        $sort = in_array($request->sort, $sortable) ? $request->sort : 'name';
+        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+        
+        $query->orderBy($sort, $direction);
+
+        // 4. Pagination 10 data per halaman dengan withQueryString()
+        $doctors = $query->paginate(10)->withQueryString();
+        $polis = \App\Models\Poli::all();
+
+        return view('dokter.index', compact('doctors', 'polis'));
     }
 
     /**
@@ -22,7 +47,6 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        // Mengambil data poli untuk pilihan dropdown di form tambah dokter
         $polis = \App\Models\Poli::all();
         return view('dokter.create', compact('polis'));
     }
@@ -49,9 +73,7 @@ class DoctorController extends Controller
      */
     public function show($id)
     {
-        // Menggunakan with('poli') untuk mencegah N+1 Query Problem sesuai materi
         $doctor = Doctor::with('poli')->findOrFail($id);
-        
         return view('dokter.show', compact('doctor'));
     }
 

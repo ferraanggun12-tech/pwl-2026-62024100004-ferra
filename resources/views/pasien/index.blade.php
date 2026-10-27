@@ -17,6 +17,33 @@
                     </div>
                 @endif
 
+                <!-- Form Search, Filter Gender & Sorting -->
+                <div style="padding: 15px; background: #f8f9fa; border-bottom: 1px solid #dee2e6;">
+                    <form method="GET" action="{{ route('pasien.index') }}" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama / No. RM..." style="padding: 6px 10px; border: 1px solid #ced4da; border-radius: 4px; flex: 1; min-width: 200px;">
+                        
+                        <select name="gender" style="padding: 6px 10px; border: 1px solid #ced4da; border-radius: 4px;">
+                            <option value="">-- Semua Gender --</option>
+                            <option value="L" {{ request('gender') == 'L' ? 'selected' : '' }}>Laki-laki (L)</option>
+                            <option value="P" {{ request('gender') == 'P' ? 'selected' : '' }}>Perempuan (P)</option>
+                        </select>
+
+                        <select name="sort" style="padding: 6px 10px; border: 1px solid #ced4da; border-radius: 4px;">
+                            <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Urut: Nama</option>
+                            <option value="medical_record_number" {{ request('sort') == 'medical_record_number' ? 'selected' : '' }}>Urut: No. RM</option>
+                            <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>Urut: Tanggal Input</option>
+                        </select>
+
+                        <select name="direction" style="padding: 6px 10px; border: 1px solid #ced4da; border-radius: 4px;">
+                            <option value="asc" {{ request('direction') == 'asc' ? 'selected' : '' }}>A-Z (Asc)</option>
+                            <option value="desc" {{ request('direction') == 'desc' ? 'selected' : '' }}>Z-A (Desc)</option>
+                        </select>
+
+                        <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-weight: bold;">Filter</button>
+                        <a href="{{ route('pasien.index') }}" style="background-color: #6c757d; color: white; padding: 6px 14px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">Reset</a>
+                    </form>
+                </div>
+
                 <div class="card-body table-responsive p-0">
                     <table class="table table-bordered text-nowrap" style="width: 100%;">
                         <thead>
@@ -32,9 +59,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($patients as $patient)
+                            @forelse ($patients as $index => $patient)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $patients->firstItem() + $index }}</td>
                                     <td>{{ $patient->medical_record_number }}</td>
                                     <td>{{ $patient->name }}</td>
                                     <td>{{ $patient->gender }}</td>
@@ -53,11 +80,19 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="text-center" style="text-align: center; padding: 15px;">Data pasien belum ada.</td>
+                                    <td colspan="8" class="text-center" style="text-align: center; padding: 20px; color: #6c757d;">Data pasien tidak ditemukan.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Pagination & Informasi Data -->
+                <div style="padding: 15px;">
+                    {{ $patients->links() }}
+                    <p style="font-size: 14px; color: #6c757d; margin-top: 5px;">
+                        Menampilkan {{ $patients->count() }} dari {{ $patients->total() }} data pasien.
+                    </p>
                 </div>
             </div>
         </div>

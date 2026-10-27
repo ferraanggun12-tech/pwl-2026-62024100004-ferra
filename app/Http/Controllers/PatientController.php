@@ -8,9 +8,34 @@ use Illuminate\Validation\Rule;
 
 class PatientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $patients = Patient::all();
+        $query = Patient::query();
+
+        // 1. Fitur Search berdasarkan nama atau nomor rekam medis
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('medical_record_number', 'like', "%{$search}%");
+            });
+        }
+
+        // 2. Filter berdasarkan Gender (L / P)
+        if ($request->has('gender') && $request->gender != '') {
+            $query->where('gender', $request->gender);
+        }
+
+        // 3. Sorting data (Whitelist kolom untuk keamanan)
+        $allowedSorts = ['name', 'medical_record_number', 'created_at'];
+        $sort = in_array($request->sort, $allowedSorts) ? $request->sort : 'name';
+        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+        
+        $query->orderBy($sort, $direction);
+
+        // 4. Pagination 10 data per halaman dengan withQueryString() agar parameter filter ikut saat pindah halaman
+        $patients = $query->paginate(10)->withQueryString();
+
         return view('pasien.index', compact('patients'));
     }
 
