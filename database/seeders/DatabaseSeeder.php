@@ -3,20 +3,33 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
-   {
-       $this->call([
-           PatientSeeder::class, 
-           DoctorSeeder::class,
-           PoliSeeder::class,  
-       ]);
-   }
+    {
+        User::firstOrCreate(
+    ['email' => 'admin@klinik.test'],
+    [
+        'name' => 'Admin Klinik',
+        'password' => Hash::make('password123'),
+    ]
+    );
+
+    User::firstOrCreate(
+        ['email' => 'petugas@klinik.test'],
+        [
+            'name' => 'Petugas Klinik',
+            'password' => Hash::make('password123'),
+        ]
+    );
+
+        $this->call([
+            PatientSeeder::class, 
+            DoctorSeeder::class,
+            PoliSeeder::class,  
+        ]);
+    }
 }
