@@ -1,4 +1,4 @@
-@extends('layouts.app') <!-- Sesuaikan dengan layout utama aplikasi kamu -->
+@extends('layouts.app') 
 
 @section('content')
 <div class="container" style="padding: 20px;">
@@ -32,13 +32,14 @@
                 {{ $registration->doctor->poli->name ?? '-' }}
             </td>
             
-            <!-- Mengambil keluhan (sesuaikan dengan nama kolom di form pendaftaran yaitu 'complaint') -->
+            <!-- Mengambil keluhan menggunakan kolom 'complaint' -->
             <td style="border: 1px solid #dee2e6; padding: 8px;">
                 {{ $registration->complaint ?? '-' }}
             </td>
 
             <td style="border: 1px solid #dee2e6; padding: 8px;">
-                <a href="#" class="btn btn-primary btn-sm" style="background-color: #007bff; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px;">Periksa</a>
+                <!-- Tombol Periksa yang mengarah ke rute create/form pemeriksaan -->
+                <a href="{{ route('pemeriksaan.create', $registration->id) }}" class="btn btn-primary btn-sm" style="background-color: #007bff; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px;">Periksa</a>
             </td>
         </tr>
         @empty

@@ -24,28 +24,30 @@ Route::middleware('guest')->group(function () {
 // 2. Route yang diproteksi Middleware Auth (Hanya bisa diakses setelah LOGIN)
 Route::middleware('auth')->group(function () {
     
-    // Dashboard dapat diakses oleh semua user yang sudah login[cite: 12]
+    // Dashboard dapat diakses oleh semua user yang sudah login
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // --- HAK AKSSES BERDASARKAN ROLE (RBAC) ---
+    // --- HAK AKSES BERDASARKAN ROLE (RBAC) ---
 
     // Hanya Admin (Manajemen User)
     Route::middleware('role:admin')->group(function () {
         Route::resource('users', UserController::class);
     });
 
-    // Admin dan Petugas Pendaftaran (Akses Pasien & Registrasi)[cite: 11]
+    // Admin dan Petugas Pendaftaran (Akses Pasien & Registrasi)
     Route::middleware('role:admin,registration')->group(function () {
         Route::resource('pasien', PatientController::class);
         Route::resource('registrasi', RegistrationController::class);
     });
 
-    // Dokter (Akses Pemeriksaan)[cite: 11]
+    // Dokter (Akses Pemeriksaan & Form Aksi Periksa)
     Route::middleware('role:doctor')->group(function () {
         Route::get('/pemeriksaan', [ExaminationController::class, 'index'])->name('pemeriksaan.index');
+        Route::get('/pemeriksaan/{id}/create', [ExaminationController::class, 'create'])->name('pemeriksaan.create');
+        Route::post('/pemeriksaan/{id}', [ExaminationController::class, 'store'])->name('pemeriksaan.store');
     });
 
-    // Admin (Akses Kelola Master Data: Dokter & Poli)[cite: 5, 11]
+    // Admin (Akses Kelola Master Data: Dokter & Poli)
     Route::middleware('role:admin')->group(function () {
         Route::resource('dokter', DoctorController::class);
         Route::resource('poli', PoliController::class);
