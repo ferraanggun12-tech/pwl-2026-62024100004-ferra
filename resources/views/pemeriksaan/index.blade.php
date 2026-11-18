@@ -18,7 +18,8 @@
                 <th style="border: 1px solid #dee2e6; padding: 8px;">Nama Pasien</th>
                 <th style="border: 1px solid #dee2e6; padding: 8px;">Poli Tujuan</th>
                 <th style="border: 1px solid #dee2e6; padding: 8px;">Keluhan</th>
-                <th style="border: 1px solid #dee2e6; padding: 8px;">Aksi</th>
+                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">Status</th>
+                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -37,14 +38,27 @@
                 {{ $registration->complaint ?? '-' }}
             </td>
 
-            <td style="border: 1px solid #dee2e6; padding: 8px;">
-                <!-- Tombol Periksa yang mengarah ke rute create/form pemeriksaan -->
-                <a href="{{ route('pemeriksaan.create', $registration->id) }}" class="btn btn-primary btn-sm" style="background-color: #007bff; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px;">Periksa</a>
+            <!-- Kolom Status -->
+            <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">
+                @if($registration->status == 'Selesai')
+                    <span style="background-color: #28a745; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px;">Selesai</span>
+                @else
+                    <span style="background-color: #ffc107; color: black; padding: 3px 8px; border-radius: 4px; font-size: 12px;">{{ $registration->status ?? 'Menunggu' }}</span>
+                @endif
+            </td>
+
+            <!-- Kolom Aksi Dinamis (Periksa / Edit Hasil) -->
+            <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">
+                @if($registration->status == 'Selesai')
+                    <a href="{{ route('pemeriksaan.edit', $registration->id) }}" class="btn btn-sm" style="background-color: #6c757d; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px;">Edit Hasil</a>
+                @else
+                    <a href="{{ route('pemeriksaan.create', $registration->id) }}" class="btn btn-primary btn-sm" style="background-color: #007bff; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px;">Periksa</a>
+                @endif
             </td>
         </tr>
         @empty
         <tr>
-            <td colspan="5" style="border: 1px solid #dee2e6; padding: 12px; text-align: center; color: #6c757d;">
+            <td colspan="6" style="border: 1px solid #dee2e6; padding: 12px; text-align: center; color: #6c757d;">
                 Belum ada antrean pasien untuk diperiksa saat ini.
             </td>
         </tr>
