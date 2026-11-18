@@ -10,22 +10,29 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::firstOrCreate(
-    ['email' => 'admin@klinik.test'],
-    [
-        'name' => 'Admin Klinik',
-        'password' => Hash::make('password123'),
-    ]
-    );
-
-    User::firstOrCreate(
-        ['email' => 'petugas@klinik.test'],
-        [
-            'name' => 'Petugas Klinik',
+        // 1. Bagian Pembuatan Akun Demo (Wajib ada agar akun bisa login)
+        User::create([
+            'name' => 'Admin Klinik',
+            'email' => 'admin@klinik.test',
             'password' => Hash::make('password123'),
-        ]
-    );
+            'role' => 'admin',
+        ]);
 
+        User::create([
+            'name' => 'Petugas Pendaftaran',
+            'email' => 'pendaftaran@klinik.test',
+            'password' => Hash::make('password123'),
+            'role' => 'registration',
+        ]);
+
+        User::create([
+            'name' => 'Dokter Demo',
+            'email' => 'dokter@klinik.test',
+            'password' => Hash::make('password123'),
+            'role' => 'doctor',
+        ]);
+
+        // 2. Bagian Panggil Seeder Lainnya
         $this->call([
             PatientSeeder::class, 
             DoctorSeeder::class,
